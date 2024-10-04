@@ -21,150 +21,120 @@ class GlobalExceptionHandler {
 
     private val log: Logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
-    // IllegalArgumentException 예외 처리
+    // Handle IllegalArgumentException
     @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(request: HttpServletRequest, e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(ErrorCode.BAD_REQUEST.message, request.requestURI, null))
+    fun handleIllegalArgumentException(request: HttpServletRequest?, e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(request, e, ErrorCode.BAD_REQUEST.message, null)
     }
 
-    // MethodArgumentNotValidException 예외 처리
+    // Handle MethodArgumentNotValidException
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(request: HttpServletRequest, e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(
-                ErrorResponse.of(
-                    ErrorCode.BAD_REQUEST.message,
-                    request.requestURI,
-                    makeFieldErrorsFromBindingResult(e.bindingResult)
-                )
-            )
+    fun handleMethodArgumentNotValidException(request: HttpServletRequest?, e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(
+            request,
+            e,
+            ErrorCode.BAD_REQUEST.message,
+            makeFieldErrorsFromBindingResult(e.bindingResult)
+        )
     }
 
-    // ConstraintViolationException 예외 처리
+    // Handle ConstraintViolationException
     @ExceptionHandler(ConstraintViolationException::class)
-    protected fun handleConstraintViolationException(request: HttpServletRequest, e: ConstraintViolationException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(
-                ErrorCode.BAD_REQUEST.message,
-                request.requestURI,
-                makeFieldErrorsFromConstraintViolations(e.constraintViolations)
-            ))
+    fun handleConstraintViolationException(request: HttpServletRequest?, e: ConstraintViolationException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(
+            request,
+            e,
+            ErrorCode.BAD_REQUEST.message,
+            makeFieldErrorsFromConstraintViolations(e.constraintViolations)
+        )
     }
 
-    // BindException 예외 처리
+    // Handle BindException
     @ExceptionHandler(BindException::class)
-    fun handleBindException(request: HttpServletRequest, e: BindException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(
-                ErrorResponse.of(
-                    ErrorCode.BAD_REQUEST.message,
-                    request.requestURI,
-                    makeFieldErrorsFromBindingResult(e.bindingResult)
-                )
-            )
+    fun handleBindException(request: HttpServletRequest?, e: BindException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(
+            request,
+            e,
+            ErrorCode.BAD_REQUEST.message,
+            makeFieldErrorsFromBindingResult(e.bindingResult)
+        )
     }
 
-    // MethodArgumentTypeMismatchException 예외 처리
+    // Handle MethodArgumentTypeMismatchException
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
-    fun handleMethodArgumentTypeMismatchException(request: HttpServletRequest, e: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        val errorResponse = ErrorResponse.of(
-            e.message ?: "Invalid argument type",
-            request.requestURI,
-            listOf(
-                ErrorResponse.FieldError(
-                    e.name ?: "unknown", // null일 경우 "unknown"으로 대체
-                    e.value.toString(),
-                    e.parameter?.parameterName ?: "unknown" // null일 경우 "unknown"으로 대체
-                )
+    fun handleMethodArgumentTypeMismatchException(request: HttpServletRequest?, e: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
+        val fieldErrors = listOf(
+            ErrorResponse.FieldError(
+                e.name ?: "unknown",
+                e.value.toString(),
+                e.parameter?.parameterName ?: "unknown"
             )
         )
-        return ResponseEntity.badRequest().body(errorResponse)
+        return createErrorResponse(request, e, "Invalid argument type", fieldErrors)
     }
 
-    // InvalidFormatException 예외 처리
+    // Handle InvalidFormatException
     @ExceptionHandler(InvalidFormatException::class)
-    protected fun handleInvalidFormatException(
-        request: HttpServletRequest, e: InvalidFormatException
-    ): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        // HTTP 400 Bad Request 응답 생성
-        return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(e.message ?: "Unknown error", request.requestURI, null))
+    fun handleInvalidFormatException(request: HttpServletRequest?, e: InvalidFormatException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(request, e, e.message ?: "Unknown error", null)
     }
 
-    // NullPointerException 예외 처리
-// NullPointerException 예외 처리
+    // Handle NullPointerException
     @ExceptionHandler(NullPointerException::class)
-    protected fun handleNullPointerException(request: HttpServletRequest, e: NullPointerException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(e.message ?: "널 포인터 예외가 발생했습니다", request.requestURI, null))
+    fun handleNullPointerException(request: HttpServletRequest?, e: NullPointerException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(request, e, "A null pointer exception occurred", null)
     }
 
-    // BusinessException 예외 처리
+    // Handle BusinessException
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(request: HttpServletRequest, e: BusinessException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
-
-        return ResponseEntity
-            .status(e.errorCode.status)
-            .body(ErrorResponse.of(e.errorCode.message, request.requestURI, null))
+    fun handleBusinessException(request: HttpServletRequest?, e: BusinessException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(e.errorCode.status)
+            .body(ErrorResponse.of(e.errorCode.message, request?.requestURI ?: "Unknown URI", null))
     }
 
-    // AccessDeniedException 예외 처리
+    // Handle AccessDeniedException
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(request: HttpServletRequest, e: AccessDeniedException): ResponseEntity<ErrorResponse> {
-        logInfo(e, request.requestURI)
+    fun handleAccessDeniedException(request: HttpServletRequest?, e: AccessDeniedException): ResponseEntity<ErrorResponse> {
+        logInfo(e, request?.requestURI ?: "Unknown URI")
         throw AccessDeniedException(e.message)
     }
 
-    // RuntimeException 예외 처리
-// RuntimeException 예외 처리
+    // Handle RuntimeException
     @ExceptionHandler(RuntimeException::class)
-    fun handleRuntimeException(request: HttpServletRequest, e: RuntimeException): ResponseEntity<ErrorResponse> {
-        logWarn(e, request.requestURI)
-
-        return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(e.message ?: "런타임 예외가 발생했습니다", request.requestURI, null))
+    fun handleRuntimeException(request: HttpServletRequest?, e: RuntimeException): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(request, e, "A runtime exception occurred", null)
     }
 
-
-    // 모든 예외 처리
-// 모든 예외 처리
+    // Handle all other exceptions
     @ExceptionHandler(Exception::class)
-    fun handleException(request: HttpServletRequest, e: Exception): ResponseEntity<ErrorResponse> {
-        logError(e, request.requestURI)
+    fun handleException(request: HttpServletRequest?, e: Exception): ResponseEntity<ErrorResponse> {
+        return createErrorResponse(request, e, "An unknown error occurred", null)
+    }
 
+    // Create an error response for different exceptions
+    private fun createErrorResponse(
+        request: HttpServletRequest?,
+        e: Exception,
+        message: String,
+        fieldErrors: List<ErrorResponse.FieldError>?
+    ): ResponseEntity<ErrorResponse> {
+        logInfo(e, request?.requestURI ?: "Unknown URI")
         return ResponseEntity.badRequest()
-            .body(ErrorResponse.of(e.message ?: "알 수 없는 오류가 발생했습니다", request.requestURI, null))
+            .body(ErrorResponse.of(message, request?.requestURI ?: "Unknown URI", fieldErrors))
     }
 
-    // BindingResult에서 필드 에러를 리스트로 변환
+    // Convert field errors from BindingResult to a list
     private fun makeFieldErrorsFromBindingResult(bindingResult: BindingResult): List<ErrorResponse.FieldError> {
-        return bindingResult.fieldErrors
-            .map { error ->
-                ErrorResponse.FieldError(
-                    error.field,
-                    error.rejectedValue,
-                    error.defaultMessage ?: "유효하지 않은 값" // 기본 메시지 제공
-                )
-            }
+        return bindingResult.fieldErrors.map { error ->
+            ErrorResponse.FieldError(
+                error.field,
+                error.rejectedValue,
+                error.defaultMessage ?: "Invalid value"
+            )
+        }
     }
 
-    // ConstraintViolation에서 필드 에러를 리스트로 변환
+    // Convert field errors from ConstraintViolations to a list
     private fun makeFieldErrorsFromConstraintViolations(constraintViolations: Set<ConstraintViolation<*>>): List<ErrorResponse.FieldError> {
         return constraintViolations.map { violation ->
             ErrorResponse.FieldError(
@@ -175,23 +145,15 @@ class GlobalExceptionHandler {
         }
     }
 
-    // 경로에서 필드 이름 추출
+    // Extract field name from path
     private fun getFieldFromPath(fieldPath: jakarta.validation.Path): String {
-        return fieldPath.last().name // Path 인터페이스를 사용하여 필드 이름 가져오기
+        return fieldPath.last().name
     }
 
-    // 정보 수준 로그 기록
+    // Log information at info level
     private fun logInfo(e: Exception, url: String) {
         log.info("URL = {}, Exception = {}, Message = {}", url, e.javaClass.simpleName, e.message)
     }
 
-    // 경고 수준 로그 기록
-    private fun logWarn(e: Exception, url: String) {
-        log.warn("URL = {}, Exception = {}, Message = {}", url, e.javaClass.simpleName, e.message)
-    }
 
-    // 오류 수준 로그 기록
-    private fun logError(e: Exception, url: String) {
-        log.error("URL = {}, Exception = {}, Message = {}", url, e.javaClass.simpleName, e.message)
-    }
 }
