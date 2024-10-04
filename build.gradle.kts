@@ -40,7 +40,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	implementation("jakarta.validation:jakarta.validation-api:3.0.0")
-
+	implementation("com.auth0:java-jwt:4.2.1") // 최신 버전으로 대체 가능
 }
 
 kotlin {
