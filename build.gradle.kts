@@ -49,6 +49,9 @@ dependencies {
 	testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
 	testImplementation("org.mockito:mockito-core:5.5.0")
 
+	implementation("io.swagger.core.v3:swagger-annotations:2.2.2")
+	implementation("io.swagger.core.v3:swagger-integration:2.2.2")
+
 }
 
 kotlin {
