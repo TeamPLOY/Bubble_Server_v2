@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class BubbleServerV2Application
+open class BubbleServerV2Application  // 'open' 키워드 추가
 
 fun main(args: Array<String>) {
 	runApplication<BubbleServerV2Application>(*args)

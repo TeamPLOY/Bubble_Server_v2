@@ -1,0 +1,23 @@
+spring:
+  config:
+    import:
+      - optional:file:env/spring.env[.properties]  # 'env/spring.env' 또는 'env/spring.env.properties' 파일을 불러옴
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRES_DB_URL}  # PostgreSQL의 URL
+    username: ${POSTGRES_DB_USERNAME}  # PostgreSQL의 사용자명
+    password: ${POSTGRES_DB_PASSWORD}  # PostgreSQL의 비밀번호
+
+  jpa:
+    database: postgresql  # JPA가 사용할 데이터베이스를 PostgreSQL로 설정
+    hibernate:
+      ddl-auto: update  # Hibernate가 데이터베이스 스키마를 자동으로 업데이트하도록 설정
+    show-sql: true  # 실행되는 SQL 쿼리를 콘솔에 출력하도록 설정
+
+  data:
+    redis:
+      host: clxxthyng.iptime.org  # Redis 서버 주소
+      port: 6379  # Redis 포트 번호
+      password: ${REDIS_DB_PASSWORD}  # Redis 비밀번호
+      timeout: 2000  # 연결 시간 제한 설정 (ms)
