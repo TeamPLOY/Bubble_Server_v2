@@ -40,7 +40,15 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	implementation("jakarta.validation:jakarta.validation-api:3.0.0")
-	implementation("com.auth0:java-jwt:4.2.1") // 최신 버전으로 대체 가능
+	implementation("com.auth0:java-jwt:4.2.1")
+
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
+	testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+	testImplementation("org.mockito:mockito-core:5.4.0")
+	testImplementation("org.mockito:mockito-junit-jupiter:5.4.0")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
+	testImplementation("org.mockito:mockito-core:5.5.0")
+
 }
 
 kotlin {
