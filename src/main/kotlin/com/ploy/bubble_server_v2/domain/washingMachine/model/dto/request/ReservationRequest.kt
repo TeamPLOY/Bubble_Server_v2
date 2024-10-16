@@ -6,4 +6,3 @@ import java.time.LocalDate
 data class ReservationRequest(
     val date: LocalDate
 )
-
