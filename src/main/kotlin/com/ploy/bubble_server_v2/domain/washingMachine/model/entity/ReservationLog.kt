@@ -13,19 +13,19 @@ import java.time.LocalDateTime
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor // 기본 생성자 추가
 class ReservationLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id: Long? = null
 
-    private val userId: Long? = null
+    private val userId: Long? = null // 예약한 사람
 
-    private val isCancel = false
+    private val isCancel = false // 예약 or 취소
 
-    private val date: LocalDateTime? = null
+    private val date: LocalDateTime? = null // 예약한 날짜
 
-    private val resDate: LocalDate? = null
+    private val resDate: LocalDate? = null // 예약할 날짜
 
-    private val washingRoom: String? = null
+    private val washingRoom: String? = null // 세탁실 위치
 }

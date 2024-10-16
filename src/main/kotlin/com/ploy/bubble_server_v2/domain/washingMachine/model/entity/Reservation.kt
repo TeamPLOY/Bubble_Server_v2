@@ -12,7 +12,7 @@ import java.time.LocalDate
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor // 기본 생성자 추가
 class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
