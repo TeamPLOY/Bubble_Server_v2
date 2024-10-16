@@ -1,6 +1,7 @@
 package com.ploy.bubble_server_v2.domain.facade
 
-import com.ploy.bubble_server_v2.domain.member.model.dto.request.EmailCheckRequest
+import com.ploy.bubble_server_v2.domain.user.model.dto.request.EmailCheckRequest
+import com.ploy.bubble_server_v2.domain.user.model.dto.request.EmailRequest
 import lombok.RequiredArgsConstructor
 
 @org.springframework.stereotype.Component
