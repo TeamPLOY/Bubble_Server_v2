@@ -1,5 +1,7 @@
 package com.ploy.bubble_server_v3.common.config;
 
+import com.ploy.bubble_server_v3.common.exception.CustomAccessDeniedHandler;
+import com.ploy.bubble_server_v3.common.exception.CustomAuthenticationEntryPoint;
 import com.ploy.bubble_server_v3.common.jwt.Jwt;
 import com.ploy.bubble_server_v3.common.jwt.filter.JwtAuthenticationFilter;
 import com.ploy.bubble_server_v3.common.jwt.JwtProperties;
@@ -10,7 +12,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -51,6 +55,16 @@ public class  SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
     }
 
     @Bean
