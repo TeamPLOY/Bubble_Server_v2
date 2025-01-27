@@ -24,6 +24,7 @@ class CustomAuthenticationEntryPointTest {
 
     @BeforeEach
     void setUp() {
+        // given
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         writer = mock(PrintWriter.class);
@@ -36,10 +37,13 @@ class CustomAuthenticationEntryPointTest {
 
     @Test
     void commence_인증_되지_않은_사용자_응답_반환() throws IOException {
+        // given
         when(response.getWriter()).thenReturn(writer);
 
+        // when
         entryPoint.commence(request, response, null);
 
+        // then
         verify(response).setCharacterEncoding("UTF-8");
         verify(response).setContentType("application/json");
         verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);

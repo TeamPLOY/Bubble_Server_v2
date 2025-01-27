@@ -21,6 +21,7 @@ class CustomAccessDeniedHandlerTest {
 
     @BeforeEach
     void setUp() {
+        // given
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -29,6 +30,7 @@ class CustomAccessDeniedHandlerTest {
 
     @Test
     void handle_접근_거부_처리_테스트() throws Exception {
+        // given
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         PrintWriter writer = mock(PrintWriter.class);
@@ -36,8 +38,10 @@ class CustomAccessDeniedHandlerTest {
         when(request.getRequestURI()).thenReturn("/test-url");
         when(response.getWriter()).thenReturn(writer);
 
+        // when
         customAccessDeniedHandler.handle(request, response, new AccessDeniedException("Access Denied"));
 
+        // then
         verify(response).setCharacterEncoding("UTF-8");
         verify(response).setContentType("application/json");
         verify(response).setStatus(HttpServletResponse.SC_FORBIDDEN);
