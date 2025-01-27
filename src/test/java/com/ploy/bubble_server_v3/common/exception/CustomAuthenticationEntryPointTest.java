@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,22 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomAuthenticationEntryPointTest {
 
-    @Mock
     private HttpServletRequest request;
-
-    @Mock
     private HttpServletResponse response;
-
-    @Mock
     private PrintWriter writer;
-
     private CustomAuthenticationEntryPoint entryPoint;
-
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        request = mock(HttpServletRequest.class);
+        response = mock(HttpServletResponse.class);
+        writer = mock(PrintWriter.class);
+
         entryPoint = new CustomAuthenticationEntryPoint();
 
         objectMapper = new ObjectMapper();
@@ -59,5 +53,4 @@ class CustomAuthenticationEntryPointTest {
         assertTrue(responseBody.contains("AUTHENTICATION_FAILED"));
         assertTrue(responseBody.contains("사용자 인증에 실패하였습니다."));
     }
-
 }
