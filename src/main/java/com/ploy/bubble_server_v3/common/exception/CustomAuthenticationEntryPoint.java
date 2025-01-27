@@ -23,7 +23,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType(APPLICATION_JSON.toString());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        // 새로운 ErrorResponse 생성
         ErrorResponse errorResponse = ErrorResponse.of(
                 HttpStatus.UNAUTHORIZED,
                 "AUTHENTICATION_FAILED",

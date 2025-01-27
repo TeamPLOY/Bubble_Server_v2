@@ -29,7 +29,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType(APPLICATION_JSON.toString());
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        // 새로운 ErrorResponse 생성
         ErrorResponse errorResponse = ErrorResponse.of(
                 HttpStatus.FORBIDDEN,
                 "ACCESS_DENIED",
