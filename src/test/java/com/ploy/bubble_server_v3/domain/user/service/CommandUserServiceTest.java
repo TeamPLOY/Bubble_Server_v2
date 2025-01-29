@@ -4,6 +4,7 @@ import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdatePasswordRequest;
+import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
 import com.ploy.bubble_server_v3.domain.user.service.CommandUserService;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserUpdater;
@@ -46,5 +47,22 @@ class CommandUserServiceTest {
 
         // then
         verify(userUpdater, times(1)).updatePassword(user, newPassword);  // updatePassword가 1번 호출되었는지 확인
+    }
+
+    @Test
+    void updateStuNum_success() {
+        // given
+        Long userId = 1L;
+        Integer newStuNum = 2116;
+        UpdateStuNumRequest request = new UpdateStuNumRequest(newStuNum);
+        Users user = new Users(1L, "hashedPassword", "한태영", 1234, "test@example.com", "B304", WashingRoom.B31, Role.USER);
+
+        when(userReader.findById(userId)).thenReturn(user);
+
+        // when
+        commandUserService.updateStuNum(userId, request);
+
+        // then
+        verify(userUpdater, times(1)).updateStuNum(user, newStuNum);  // updateStuNum이 1번 호출되었는지 확인
     }
 }

@@ -37,4 +37,18 @@ class UserUpdaterTest {
         verify(user, times(1)).updatePassword(anyString());  // updatePassword가 1번 호출되었는지 확인
         verify(usersRepository, times(1)).save(user);        // save가 1번 호출되었는지 확인
     }
+
+    @Test
+    void updateStuNum_success() {
+        // given
+        Users user = mock(Users.class);
+        Integer newStuNum = 2116;
+
+        // when
+        userUpdater.updateStuNum(user, newStuNum);
+
+        // then
+        verify(user, times(1)).updateStuNum(anyInt());  // updateStuNum이 1번 호출되었는지 확인
+        verify(usersRepository, times(1)).save(user);   // save가 1번 호출되었는지 확인
+    }
 }
