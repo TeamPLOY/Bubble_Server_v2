@@ -1,6 +1,7 @@
 package com.ploy.bubble_server_v3.domain.user.presentation;
 
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdatePasswordRequest;
+import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
 import com.ploy.bubble_server_v3.domain.user.service.CommandUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,15 @@ public class UserController {
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest req)
     {
         commandUserService.updatePassword(getMemberId(), req);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "학번 변경")
+    @PatchMapping("/stuNum")
+    public ResponseEntity<Void> updateStuNum(@RequestBody UpdateStuNumRequest req)
+    {
+        commandUserService.updateStuNum(getMemberId(), req);
 
         return ResponseEntity.noContent().build();
     }
