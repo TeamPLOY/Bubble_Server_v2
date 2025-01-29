@@ -38,4 +38,8 @@ public class Users {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void updateStuNum(Integer newStuNum) {
+        this.stuNum = newStuNum;
+    }
 }

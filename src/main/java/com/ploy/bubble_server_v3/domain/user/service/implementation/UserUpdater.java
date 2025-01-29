@@ -20,4 +20,11 @@ public class UserUpdater {
 
         userRepository.save(user);
     }
+
+    public void updateStuNum(Users user, Integer newStuNum) {
+
+        user.updateStuNum(newStuNum);
+
+        userRepository.save(user);
+    }
 }

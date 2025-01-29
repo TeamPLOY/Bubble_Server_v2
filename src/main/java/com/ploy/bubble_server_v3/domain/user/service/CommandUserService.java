@@ -2,6 +2,7 @@ package com.ploy.bubble_server_v3.domain.user.service;
 
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdatePasswordRequest;
+import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserUpdater;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,10 @@ public class CommandUserService {
     public void updatePassword(Long id, UpdatePasswordRequest request) {
         Users user = userReader.findById(id);
         userUpdater.updatePassword(user, request.password());
+    }
+
+    public void updateStuNum(Long id, UpdateStuNumRequest request) {
+        Users user = userReader.findById(id);
+        userUpdater.updateStuNum(user, request.stuNum());
     }
 }
