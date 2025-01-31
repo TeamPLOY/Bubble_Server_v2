@@ -2,6 +2,7 @@ package com.ploy.bubble_server_v3.domain.user.service.implementation;
 
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,19 @@ public class UserUpdater {
 
         userRepository.save(user);
     }
+
+    public void updateRoomNum(Users user, String newRoomNum) {
+        user.updateRoomNum(newRoomNum);
+
+        String prefix = newRoomNum.substring(0, 1);
+        int roomNumber = Integer.parseInt(newRoomNum.substring(1));
+
+            WashingRoom newWashingRoom = WashingRoom.valueOf(WashingRoom.findWashingRoom(prefix, roomNumber));
+
+        user.updateWashingRoom(newWashingRoom);
+
+        userRepository.save(user);
+    }
+
+
 }
