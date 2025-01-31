@@ -42,4 +42,12 @@ public class Users {
     public void updateStuNum(Integer newStuNum) {
         this.stuNum = newStuNum;
     }
+
+    public void updateRoomNum(String newRoomNum) {
+        this.roomNum = newRoomNum;
+    }
+
+    public void updateWashingRoom(WashingRoom washingRoom) {
+        this.washingRoom = washingRoom;
+    }
 }
