@@ -5,10 +5,11 @@ import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdatePasswordRequest;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
-import com.ploy.bubble_server_v3.domain.user.service.CommandUserService;
+import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateRoomNumRequest;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserUpdater;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,10 +30,11 @@ class CommandUserServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);  // Mockito 초기화
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
+    @DisplayName("비밀번호 업데이트 성공")
     void updatePassword_success() {
         // given
         Long userId = 1L;
@@ -46,10 +48,11 @@ class CommandUserServiceTest {
         commandUserService.updatePassword(userId, request);
 
         // then
-        verify(userUpdater, times(1)).updatePassword(user, newPassword);  // updatePassword가 1번 호출되었는지 확인
+        verify(userUpdater, times(1)).updatePassword(user, newPassword);
     }
 
     @Test
+    @DisplayName("학번 업데이트 성공")
     void updateStuNum_success() {
         // given
         Long userId = 1L;
@@ -63,6 +66,24 @@ class CommandUserServiceTest {
         commandUserService.updateStuNum(userId, request);
 
         // then
-        verify(userUpdater, times(1)).updateStuNum(user, newStuNum);  // updateStuNum이 1번 호출되었는지 확인
+        verify(userUpdater, times(1)).updateStuNum(user, newStuNum);
+    }
+
+    @Test
+    @DisplayName("방 번호 업데이트 성공")
+    void updateRoomNum_success() {
+        // given
+        Long userId = 1L;
+        String newRoomNum = "B402";
+        UpdateRoomNumRequest request = new UpdateRoomNumRequest(newRoomNum);
+        Users user = new Users(1L, "hashedPassword", "한태영", 1234, "test@example.com", "B304", WashingRoom.B31, Role.USER);
+
+        when(userReader.findById(userId)).thenReturn(user);
+
+        // when
+        commandUserService.updateRoomNum(userId, request);
+
+        // then
+        verify(userUpdater, times(1)).updateRoomNum(user, newRoomNum);
     }
 }
