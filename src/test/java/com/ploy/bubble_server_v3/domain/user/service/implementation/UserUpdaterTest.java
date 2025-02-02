@@ -32,7 +32,7 @@ class UserUpdaterTest {
         userUpdater.updatePassword(user, newPassword);
 
         // then
-        verify(user, times(1)).updatePassword(anyString()); // No need to verify the exact encoded password
+        verify(user, times(1)).updatePassword(anyString());
     }
 
     @Test
