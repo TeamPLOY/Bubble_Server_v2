@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum WashingRoom {
-    //열거형은 학기마다 달라질 수 있습니다.
+    // 열거형은 학기마다 달라질 수 있습니다.
     A41("A41", "A", 401, 417, 0, 0),
     A42("A42", "A", 418, 434, 0, 0),
     A31("A31", "A", 302, 307, 327, 334),
@@ -19,21 +19,21 @@ public enum WashingRoom {
 
     UNKNOWN("UNKNOWN", "", 0, 0, 0, 0);
 
-    private final String washingRoom;
+    private final String code;
     private final String prefix;
     private final int minRoom;
     private final int maxRoom;
     private final int minRoomExtra;
     private final int maxRoomExtra;
 
-    public static String findWashingRoom(String prefix, int roomNumber) {
+    public static WashingRoom findWashingRoom(String prefix, int roomNumber) {
         for (WashingRoom room : values()) {
             if (room.prefix.equals(prefix) &&
                     ((room.minRoom <= roomNumber && roomNumber <= room.maxRoom) ||
                             (room.minRoomExtra <= roomNumber && roomNumber <= room.maxRoomExtra))) {
-                return room.washingRoom;
+                return room;
             }
         }
-        return UNKNOWN.washingRoom;
+        return UNKNOWN;
     }
 }
