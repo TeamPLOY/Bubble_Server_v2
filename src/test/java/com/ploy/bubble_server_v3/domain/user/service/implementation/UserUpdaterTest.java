@@ -5,7 +5,6 @@ import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -56,18 +55,13 @@ class UserUpdaterTest {
         // given
         Users user = mock(Users.class);
         String newRoomNum = "B304";
-        WashingRoom mockWashingRoom = mock(WashingRoom.class);
+        WashingRoom newWashingRoom = WashingRoom.B31;
 
-        // Mock the static method using Mockito.mockStatic
-        try (var mock = Mockito.mockStatic(WashingRoom.class)) {
-            when(WashingRoom.findWashingRoom("B", 304)).thenReturn(mockWashingRoom);
+        // when
+        userUpdater.updateRoomNum(user, newRoomNum, newWashingRoom);
 
-            // when
-            userUpdater.updateRoomNum(user, newRoomNum);
-
-            // then
-            verify(user, times(1)).updateRoomNum(newRoomNum);
-            verify(user, times(1)).updateWashingRoom(mockWashingRoom);
-        }
+        // then
+        verify(user, times(1)).updateRoomNum(newRoomNum);
+        verify(user, times(1)).updateWashingRoom(newWashingRoom);
     }
 }
