@@ -1,11 +1,11 @@
 package com.ploy.bubble_server_v3.domain.user.service.implementation;
 
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
-import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -13,15 +13,13 @@ import static org.mockito.Mockito.*;
 
 class UserUpdaterTest {
 
-    private UsersRepository usersRepository;
     private PasswordEncoder passwordEncoder;
     private UserUpdater userUpdater;
 
     @BeforeEach
     void setUp() {
-        usersRepository = mock(UsersRepository.class);
         passwordEncoder = new BCryptPasswordEncoder();
-        userUpdater = new UserUpdater(passwordEncoder, usersRepository);
+        userUpdater = new UserUpdater(passwordEncoder);
     }
 
     @Test
@@ -30,14 +28,12 @@ class UserUpdaterTest {
         // given
         Users user = mock(Users.class);
         String newPassword = "newSecurePassword";
-        String encodedPassword = passwordEncoder.encode(newPassword);
 
         // when
         userUpdater.updatePassword(user, newPassword);
 
         // then
-        verify(user, times(1)).updatePassword(anyString());
-        verify(usersRepository, times(1)).save(user);
+        verify(user, times(1)).updatePassword(anyString()); // No need to verify the exact encoded password
     }
 
     @Test
@@ -51,8 +47,7 @@ class UserUpdaterTest {
         userUpdater.updateStuNum(user, newStuNum);
 
         // then
-        verify(user, times(1)).updateStuNum(anyInt());
-        verify(usersRepository, times(1)).save(user);
+        verify(user, times(1)).updateStuNum(newStuNum);
     }
 
     @Test
@@ -61,13 +56,18 @@ class UserUpdaterTest {
         // given
         Users user = mock(Users.class);
         String newRoomNum = "B304";
+        WashingRoom mockWashingRoom = mock(WashingRoom.class);
 
-        // when
-        userUpdater.updateRoomNum(user, newRoomNum);
+        // Mock the static method using Mockito.mockStatic
+        try (var mock = Mockito.mockStatic(WashingRoom.class)) {
+            when(WashingRoom.findWashingRoom("B", 304)).thenReturn(mockWashingRoom);
 
-        // then
-        verify(user, times(1)).updateRoomNum(newRoomNum);
-        verify(user, times(1)).updateWashingRoom(any(WashingRoom.class));
-        verify(usersRepository, times(1)).save(user);
+            // when
+            userUpdater.updateRoomNum(user, newRoomNum);
+
+            // then
+            verify(user, times(1)).updateRoomNum(newRoomNum);
+            verify(user, times(1)).updateWashingRoom(mockWashingRoom);
+        }
     }
 }
