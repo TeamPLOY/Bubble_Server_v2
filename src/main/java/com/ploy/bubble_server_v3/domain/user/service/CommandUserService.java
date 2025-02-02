@@ -1,6 +1,7 @@
 package com.ploy.bubble_server_v3.domain.user.service;
 
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdatePasswordRequest;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateRoomNumRequest;
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
@@ -30,6 +31,7 @@ public class CommandUserService {
 
     public void updateRoomNum(Long id, UpdateRoomNumRequest request) {
         Users user = userReader.findById(id);
-        userUpdater.updateRoomNum(user, request.roomNum());
+        WashingRoom newWashingRoom = userReader.getWashingRoomFromRoomNum(request.roomNum());
+        userUpdater.updateRoomNum(user, request.roomNum(),newWashingRoom);
     }
 }

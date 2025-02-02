@@ -22,12 +22,7 @@ public class UserUpdater {
         user.updateStuNum(newStuNum);
     }
 
-    public void updateRoomNum(Users user, String newRoomNum) {
-        String prefix = newRoomNum.substring(0, 1);
-        int roomNumber = Integer.parseInt(newRoomNum.substring(1));
-
-        WashingRoom newWashingRoom = WashingRoom.findWashingRoom(prefix, roomNumber);
-
+    public void updateRoomNum(Users user, String newRoomNum, WashingRoom newWashingRoom) {
         user.updateRoomNum(newRoomNum);
         user.updateWashingRoom(newWashingRoom);
     }

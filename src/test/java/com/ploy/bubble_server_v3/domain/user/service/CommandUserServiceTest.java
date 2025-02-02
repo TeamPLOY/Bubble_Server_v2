@@ -77,13 +77,15 @@ class CommandUserServiceTest {
         String newRoomNum = "B402";
         UpdateRoomNumRequest request = new UpdateRoomNumRequest(newRoomNum);
         Users user = new Users(1L, "hashedPassword", "한태영", 1234, "test@example.com", "B304", WashingRoom.B31, Role.USER);
+        WashingRoom newWashingRoom = WashingRoom.B42;
 
         when(userReader.findById(userId)).thenReturn(user);
+        when(userReader.getWashingRoomFromRoomNum(newRoomNum)).thenReturn(newWashingRoom);
 
         // when
         commandUserService.updateRoomNum(userId, request);
 
         // then
-        verify(userUpdater, times(1)).updateRoomNum(user, newRoomNum);
+        verify(userUpdater, times(1)).updateRoomNum(user, newRoomNum, newWashingRoom);
     }
 }
