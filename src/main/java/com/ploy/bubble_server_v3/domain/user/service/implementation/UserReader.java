@@ -29,4 +29,8 @@ public class UserReader {
         return usersRepository.findByEmail(email)
                 .orElseThrow(EmailNotFoundException::new);
     }
+
+    public Users getUserById(Long id) {
+        return usersRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
 }

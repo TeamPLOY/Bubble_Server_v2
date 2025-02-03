@@ -3,12 +3,14 @@ package com.ploy.bubble_server_v3.domain.auth.service;
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
 import com.ploy.bubble_server_v3.domain.auth.domain.Token;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
+import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.QuitRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.ploy.bubble_server_v3.domain.auth.service.implementation.*;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
+import com.ploy.bubble_server_v3.domain.user.service.implementation.UserDeleter;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class CommandAuthService {
     private final AuthValidator authValidator;
     private final AuthDeleter authDeleter;
     private final UserReader userReader;
+    private final UserDeleter userDeleter;
 
     public void signUp(SignUpRequest request) {
         authReader.isEmailExist(request.email());
@@ -45,5 +48,10 @@ public class CommandAuthService {
     public void logout(TokenRefreshRequest request){
         Token existingToken = authReader.findByRefreshToken(request.refreshToken());
         authDeleter.deleteRefreshToken(existingToken);
+    }
+
+    public void quit(Long id,QuitRequest request){
+        Users user = userReader.getUserById(id);
+        userDeleter.deleteUser(user, request.password());
     }
 }
