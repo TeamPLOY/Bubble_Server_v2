@@ -3,6 +3,7 @@ package com.ploy.bubble_server_v3.domain.auth.presentation;
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
+import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.ploy.bubble_server_v3.domain.auth.service.CommandAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "인증/인가")
@@ -35,5 +37,13 @@ public class AuthController {
     @PermitAll
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
         return ResponseEntity.ok(commandAuthService.login(req));
+    }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity<Void> logout(@Valid @RequestBody TokenRefreshRequest req) {
+        commandAuthService.logout(req);
+        return ResponseEntity.noContent().build();
     }
 }
