@@ -41,16 +41,15 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 try {
                     Jwt.Claims claims = verify(token);
                     Long memberId = claims.getUserId();
-                    Role[] roles = claims.getRoles();  // roles가 Role[] 배열로 반환됨
+                    Role[] roles = claims.getRoles();
                     List<SimpleGrantedAuthority> authorities = Arrays.stream(roles)
-                            .map(role -> new SimpleGrantedAuthority(role.getRole())) // ROLE_ 접두사를 제거한 role 사용
-                            .collect(Collectors.toList()); // 권한 리스트로 변환
+                            .map(role -> new SimpleGrantedAuthority(role.getRole()))
+                            .collect(Collectors.toList());
 
                     log.info("userId : " + memberId);
                     log.info("roles : " + Arrays.toString(roles));
 
                     if (memberId != null) {
-                        // 권한을 포함한 인증 객체 생성
                         UsernamePasswordAuthenticationToken authentication =
                                 new UsernamePasswordAuthenticationToken(memberId, null, authorities);
                         log.info("authentication : " + authentication.toString());
