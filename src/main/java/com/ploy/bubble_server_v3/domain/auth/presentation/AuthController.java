@@ -57,4 +57,11 @@ public class AuthController {
         commandAuthService.quit(getUserId(),req);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "토큰 갱신")
+    @PostMapping("refresh")
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody TokenRefreshRequest req) {
+        return ResponseEntity.ok(commandAuthService.refresh(req));
+    }
 }
