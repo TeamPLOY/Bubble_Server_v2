@@ -16,7 +16,6 @@ public class AuthUpdater {
     private final Jwt jwt;
     private final TokenRepository tokenRepository;
 
-    @Transactional
     public TokenResponse publishToken(Users user, String deviceToken, Token existingToken) {
         Jwt.Claims claims = Jwt.Claims.from(user.getId(), new Role[]{Role.USER});
         TokenResponse tokenResponse = jwt.generateAllToken(claims);
