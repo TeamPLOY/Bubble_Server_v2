@@ -25,4 +25,8 @@ public class Token {
     public void updateRefreshToken(String newRefreshToken) {
         this.refreshToken = newRefreshToken;
     }
+
+    public void deleteRefreshToken(){
+        this.refreshToken = null;
+    }
 }
