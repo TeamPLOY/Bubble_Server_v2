@@ -19,12 +19,9 @@ public record SignUpRequest(
         @NotBlank String name,
 
         @Schema(description = "학번")
-        @NotNull Integer stuNum, // 수정된 부분
+        @NotNull Integer stuNum,
 
         @Schema(description = "방번호")
-        @NotBlank String roomNum,
-
-        @Schema(description = "토큰")
-        @NotBlank String token // 수정된 부분
+        @NotBlank String roomNum
 ) {
 }
