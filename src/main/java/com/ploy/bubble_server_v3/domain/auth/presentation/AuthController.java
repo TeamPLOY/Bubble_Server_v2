@@ -34,7 +34,6 @@ public class AuthController {
     @PostMapping("/login")
     @PermitAll
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
-        commandAuthService.login(req);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(commandAuthService.login(req));
     }
 }
