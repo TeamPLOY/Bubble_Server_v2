@@ -1,5 +1,6 @@
 package com.ploy.bubble_server_v3.domain.user.service.implementation;
 
+import com.ploy.bubble_server_v3.domain.auth.exception.EmailNotFoundException;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserReader {
 
-    private final UsersRepository userRepository;
+    private final UsersRepository usersRepository;
 
     public Users findById(Long id) {
-        return userRepository.findById(id)
+        return usersRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
@@ -22,5 +23,10 @@ public class UserReader {
         String prefix = roomNum.substring(0, 1);
         int roomNumber = Integer.parseInt(roomNum.substring(1));
         return WashingRoom.findWashingRoom(prefix, roomNumber);
+    }
+
+    public Users findUserByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(EmailNotFoundException::new);
     }
 }

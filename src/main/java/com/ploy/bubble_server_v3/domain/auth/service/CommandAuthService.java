@@ -33,7 +33,7 @@ public class CommandAuthService {
     }
 
     public TokenResponse login(LoginRequest request){
-        Users user = authReader.findUserByEmail(request.email());
+        Users user = userReader.findUserByEmail(request.email());
 
         Token existingToken = authReader.findTokenByUserAndDeviceToken(user, request.deviceToken());
 

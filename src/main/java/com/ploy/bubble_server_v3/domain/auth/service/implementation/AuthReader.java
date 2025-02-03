@@ -22,12 +22,6 @@ public class AuthReader {
         return false;
     }
 
-    public Users findUserByEmail(String email) {
-        return usersRepository.findByEmail(email)
-                .orElseThrow(EmailNotFoundException::new);
-    }
-
-
     public Token findTokenByUserAndDeviceToken(Users user, String deviceToken) {
         return tokenRepository.findByUserIdAndDeviceToken(user.getId(), deviceToken)
                 .orElseGet(() -> Token.builder()
