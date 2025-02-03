@@ -21,4 +21,8 @@ public class Token {
     private String refreshToken;
 
     private String deviceToken;
+
+    public void updateRefreshToken(String newRefreshToken) {
+        this.refreshToken = newRefreshToken;
+    }
 }
