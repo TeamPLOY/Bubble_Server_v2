@@ -1,5 +1,7 @@
 package com.ploy.bubble_server_v3.domain.auth.presentation;
 
+import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
+import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
 import com.ploy.bubble_server_v3.domain.auth.service.CommandAuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,15 +18,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-@PermitAll
 public class AuthController {
 
     private final CommandAuthService commandAuthService;
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
+    @PermitAll
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequest req) {
         commandAuthService.signUp(req);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    @PermitAll
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest req) {
+        commandAuthService.login(req);
         return ResponseEntity.noContent().build();
     }
 }
