@@ -2,6 +2,7 @@ package com.ploy.bubble_server_v3.domain.auth.presentation;
 
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
+import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.QuitRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.ploy.bubble_server_v3.domain.auth.service.CommandAuthService;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import static com.ploy.bubble_server_v3.common.util.AuthenticationUtil.getUserId;
 
 @Tag(name = "인증/인가")
 @Slf4j
@@ -44,6 +47,14 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity<Void> logout(@Valid @RequestBody TokenRefreshRequest req) {
         commandAuthService.logout(req);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity<Void> quit(@Valid @RequestBody QuitRequest req) {
+        commandAuthService.quit(getUserId(),req);
         return ResponseEntity.noContent().build();
     }
 }
