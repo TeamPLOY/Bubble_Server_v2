@@ -2,6 +2,7 @@ package com.ploy.bubble_server_v3.domain.auth.service.implementation;
 
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class AuthCreator {
                 .stuNum(req.stuNum())
                 .roomNum(req.roomNum())
                 .washingRoom(washingRoom)
+                .role(Role.USER)
                 .build();
     }
 }
