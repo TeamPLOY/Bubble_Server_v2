@@ -3,6 +3,8 @@ package com.ploy.bubble_server_v3.domain.auth.domain;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -16,6 +18,7 @@ public class Token {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Users user;
 
     private String refreshToken;
