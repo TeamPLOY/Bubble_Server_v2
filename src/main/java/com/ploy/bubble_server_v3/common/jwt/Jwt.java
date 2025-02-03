@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,7 +49,9 @@ public class Jwt {
                 .withIssuedAt(now)
                 .withExpiresAt(new Date(now.getTime() + expireTime * 1000L))
                 .withClaim("userId", claims.userId)
-                .withArrayClaim("roles", claims.roles)
+                .withArrayClaim("roles", Arrays.stream(claims.roles)  // roles를 문자열 배열로 변환
+                        .map(Role::name)  // Role 객체에서 이름(String)으로 변환
+                        .toArray(String[]::new))  // String[] 배열로 변환
                 .sign(algorithm);
     }
 
@@ -60,24 +63,26 @@ public class Jwt {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Claims {
         Long userId;
-        String[] roles;
+        Role[] roles;
         Date iat;
         Date exp;
 
         Claims(DecodedJWT decodedJwt) {
-            Claim memberId = decodedJwt.getClaim("memberId");
+            Claim memberId = decodedJwt.getClaim("userId");
             if (!memberId.isNull()) {
                 this.userId = memberId.asLong();
             }
             Claim roles = decodedJwt.getClaim("roles");
             if (!roles.isNull()) {
-                this.roles = roles.asArray(String.class);
+                this.roles = Arrays.stream(roles.asArray(String.class)) // 역할을 String 배열로 받아오기
+                        .map(Role::valueOf) // String을 Role 객체로 변환
+                        .toArray(Role[]::new); // Role[] 배열로 변환
             }
             this.iat = decodedJwt.getIssuedAt();
             this.exp = decodedJwt.getExpiresAt();
         }
 
-        public static Claims from(Long memberId, String[] roles) {
+        public static Claims from(Long memberId, Role[] roles) {
             Claims claims = new Claims();
             claims.userId = memberId;
             claims.roles = roles;
