@@ -35,4 +35,17 @@ public class AuthUpdater {
 
         return tokenResponse;
     }
+
+    public TokenResponse refreshToken(Token existingToken) {
+        Users user = existingToken.getUser();
+
+        Jwt.Claims claims = Jwt.Claims.from(user.getId(), new Role[]{Role.USER});
+        TokenResponse tokenResponse = jwt.generateAllToken(claims);
+
+        existingToken.updateRefreshToken(tokenResponse.refreshToken());
+
+        tokenRepository.save(existingToken);
+
+        return tokenResponse;
+    }
 }

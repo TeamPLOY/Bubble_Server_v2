@@ -1,5 +1,6 @@
 package com.ploy.bubble_server_v3.domain.auth.service;
 
+import com.ploy.bubble_server_v3.common.jwt.Jwt;
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
 import com.ploy.bubble_server_v3.domain.auth.domain.Token;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
@@ -9,6 +10,7 @@ import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.TokenRefre
 import com.ploy.bubble_server_v3.domain.auth.service.implementation.*;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
 import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserDeleter;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
@@ -54,4 +56,11 @@ public class CommandAuthService {
         Users user = userReader.getUserById(id);
         userDeleter.deleteUser(user, request.password());
     }
+
+    public TokenResponse refresh(TokenRefreshRequest request) {
+        Token existingToken = authReader.findByRefreshToken(request.refreshToken());
+
+        return authUpdater.refreshToken(existingToken);
+    }
+
 }
