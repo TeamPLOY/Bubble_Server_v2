@@ -1,4 +1,4 @@
-package com.ploy.bubble_server_v3.domain.auth.service.implementation;
+package com.ploy.bubble_server_v3.domain.user.service.implementation;
 
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequest;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthCreator {
+public class UserCreator {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
 

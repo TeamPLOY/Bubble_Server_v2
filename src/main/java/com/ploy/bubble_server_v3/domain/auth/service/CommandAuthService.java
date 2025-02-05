@@ -1,6 +1,5 @@
 package com.ploy.bubble_server_v3.domain.auth.service;
 
-import com.ploy.bubble_server_v3.common.jwt.Jwt;
 import com.ploy.bubble_server_v3.common.jwt.dto.TokenResponse;
 import com.ploy.bubble_server_v3.domain.auth.domain.Token;
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.LoginRequest;
@@ -9,9 +8,8 @@ import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.SignUpRequ
 import com.ploy.bubble_server_v3.domain.auth.presentation.dto.request.TokenRefreshRequest;
 import com.ploy.bubble_server_v3.domain.auth.service.implementation.*;
 import com.ploy.bubble_server_v3.domain.user.domain.Users;
-import com.ploy.bubble_server_v3.domain.user.domain.repository.UsersRepository;
-import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import com.ploy.bubble_server_v3.domain.user.domain.vo.WashingRoom;
+import com.ploy.bubble_server_v3.domain.user.service.implementation.UserCreator;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserDeleter;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommandAuthService {
 
     private final AuthReader authReader;
-    private final AuthCreator authCreator;
+    private final UserCreator userCreator;
     private final AuthUpdater authUpdater;
     private final AuthValidator authValidator;
     private final AuthDeleter authDeleter;
@@ -34,7 +32,7 @@ public class CommandAuthService {
     public void signUp(SignUpRequest request) {
         authReader.isEmailExist(request.email());
         WashingRoom washingRoom = userReader.getWashingRoomFromRoomNum(request.roomNum());
-        authCreator.create(request, washingRoom);
+        userCreator.create(request, washingRoom);
     }
 
     public TokenResponse login(LoginRequest request){
