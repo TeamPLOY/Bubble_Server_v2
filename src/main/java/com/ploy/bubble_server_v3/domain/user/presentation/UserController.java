@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ploy.bubble_server_v3.common.util.AuthenticationUtil.getMemberId;
+import static com.ploy.bubble_server_v3.common.util.AuthenticationUtil.getUserId;
 
 @Tag(name = "유저 정보 변경")
 @Slf4j
@@ -27,7 +27,7 @@ public class UserController {
     @PatchMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest req)
     {
-        commandUserService.updatePassword(getMemberId(), req);
+        commandUserService.updatePassword(getUserId(), req);
 
         return ResponseEntity.noContent().build();
     }
@@ -36,7 +36,7 @@ public class UserController {
     @PatchMapping("/stuNum")
     public ResponseEntity<Void> updateStuNum(@RequestBody UpdateStuNumRequest req)
     {
-        commandUserService.updateStuNum(getMemberId(), req);
+        commandUserService.updateStuNum(getUserId(), req);
 
         return ResponseEntity.noContent().build();
     }
@@ -45,7 +45,7 @@ public class UserController {
     @PatchMapping("/roomNum")
     public ResponseEntity<Void> updateRoomNum(@RequestBody UpdateRoomNumRequest req)
     {
-        commandUserService.updateRoomNum(getMemberId(), req);
+        commandUserService.updateRoomNum(getUserId(), req);
 
         return ResponseEntity.noContent().build();
     }

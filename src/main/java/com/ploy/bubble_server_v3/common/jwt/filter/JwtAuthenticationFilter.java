@@ -1,18 +1,23 @@
 package com.ploy.bubble_server_v3.common.jwt.filter;
 
 import com.ploy.bubble_server_v3.common.jwt.Jwt;
+import com.ploy.bubble_server_v3.domain.user.domain.vo.Role;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,12 +41,17 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 try {
                     Jwt.Claims claims = verify(token);
                     Long memberId = claims.getUserId();
+                    Role[] roles = claims.getRoles();
+                    List<SimpleGrantedAuthority> authorities = Arrays.stream(roles)
+                            .map(role -> new SimpleGrantedAuthority(role.getRole()))
+                            .collect(Collectors.toList());
 
                     log.info("userId : " + memberId);
+                    log.info("roles : " + Arrays.toString(roles));
 
                     if (memberId != null) {
                         UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(memberId, null);
+                                new UsernamePasswordAuthenticationToken(memberId, null, authorities);
                         log.info("authentication : " + authentication.toString());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
@@ -94,5 +104,3 @@ public class JwtAuthenticationFilter extends GenericFilter {
         return jwt.verify(token);
     }
 }
-
-

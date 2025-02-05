@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AuthenticationUtil {
-    public static Long getMemberId() {
+    public static Long getUserId() {
         var anonymous = String.valueOf(isAnonymous());
         log.warn("known : "+anonymous);
         if (isAnonymous()) {
