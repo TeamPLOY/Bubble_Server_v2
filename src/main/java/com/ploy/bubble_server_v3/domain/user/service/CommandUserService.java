@@ -7,6 +7,7 @@ import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateRoomNumReque
 import com.ploy.bubble_server_v3.domain.user.presentation.dto.UpdateStuNumRequest;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserReader;
 import com.ploy.bubble_server_v3.domain.user.service.implementation.UserUpdater;
+import com.ploy.bubble_server_v3.domain.user.service.implementation.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +19,12 @@ public class CommandUserService {
 
     private final UserReader userReader;
     private final UserUpdater userUpdater;
+    private final UserValidator userValidator;
 
     public void updatePassword(Long id, UpdatePasswordRequest request) {
         Users user = userReader.findById(id);
-        userUpdater.updatePassword(user, request.password());
+        userValidator.validateCurrentPassword(user, request.currentPassword());
+        userUpdater.updatePassword(user, request.newPassword());
     }
 
     public void updateStuNum(Long id, UpdateStuNumRequest request) {
