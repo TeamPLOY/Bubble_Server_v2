@@ -46,8 +46,7 @@ class UserControllerTest {
     @Test
     @DisplayName("비밀번호 변경 요청 성공")
     void updatePassword_success() throws Exception {
-        UpdatePasswordRequest request = new UpdatePasswordRequest("newPassword123");
-
+        UpdatePasswordRequest request = new UpdatePasswordRequest("currentPassword123","newPassword123");
         lenient().doNothing().when(commandUserService).updatePassword(any(), any());
 
         mockMvc.perform(patch("/user/password")
