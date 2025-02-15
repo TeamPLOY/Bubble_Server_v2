@@ -47,7 +47,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("회원가입 요청 성공")
     void signUp_success() throws Exception {
-        SignUpRequest request = new SignUpRequest("test@example.com", "password123", "TestUser", 2116, "B314");
+        SignUpRequest request = new SignUpRequest("test@example.com", "password123!", "TestUser", 2116, "B314");
 
         lenient().doNothing().when(commandAuthService).signUp(any());
 
@@ -60,7 +60,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("로그인 요청 성공")
     void login_success() throws Exception {
-        LoginRequest request = new LoginRequest("user@example.com", "password123", "deviceToken123");
+        LoginRequest request = new LoginRequest("user@example.com", "password123!", "deviceToken123");
 
         TokenResponse mockToken = new TokenResponse("access-token-value", "refresh-token-value");
 
@@ -88,7 +88,7 @@ class AuthControllerTest {
     @Test
     @DisplayName("회원탈퇴 요청 성공")
     void quit_success() throws Exception {
-        QuitRequest request = new QuitRequest("password123");
+        QuitRequest request = new QuitRequest("password123!");
 
         lenient().doNothing().when(commandAuthService).quit(any(), any());
 
