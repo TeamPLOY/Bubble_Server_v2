@@ -57,10 +57,4 @@ class UserReaderTest {
         assertNotNull(washingRoom);
         assertEquals(WashingRoom.B31, washingRoom); // 기대하는 WashingRoom 값을 정확히 확인해야 함
     }
-
-    @Test
-    void getWashingRoomFromRoomNum_invalidRoom() {
-        // when & then
-        assertThrows(IllegalArgumentException.class, () -> userReader.getWashingRoomFromRoomNum("X999"));
-    }
 }

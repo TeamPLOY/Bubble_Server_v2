@@ -36,7 +36,7 @@ class CommandAuthServiceTest {
     @InjectMocks private CommandAuthService commandAuthService;
 
     private final String email = "test@example.com";
-    private final String password = "password123";
+    private final String password = "password123!";
     private final String encodedPassword = "$2a$10$encodedpassword";
     private final String deviceToken = "device123";
     private final String refreshToken = "refreshToken123";
@@ -64,7 +64,7 @@ class CommandAuthServiceTest {
 
     @Test
     void signUp_이메일존재시_EmailAlreadyExistsException_발생() {
-        SignUpRequest request = new SignUpRequest("test@example.com", "password123", "TestUser", 2116, "B314");
+        SignUpRequest request = new SignUpRequest("test@example.com", "password123!", "TestUser", 2116, "B314");
 
         doThrow(new EmailAlreadyExistsException()).when(authReader).isEmailExist(email);
 
@@ -73,12 +73,9 @@ class CommandAuthServiceTest {
 
     @Test
     void signUp_성공() {
-        SignUpRequest request = new SignUpRequest("test@example.com", "password123", "TestUser", 2116, "B314");
-        WashingRoom washingRoom = WashingRoom.B31;
+        when(authReader.isEmailExist(anyString())).thenReturn(false);
 
-        doNothing().when(authReader).isEmailExist(email);
-        when(userReader.getWashingRoomFromRoomNum(request.roomNum())).thenReturn(washingRoom);
-        doNothing().when(userCreator).create(request, washingRoom);
+        SignUpRequest request = new SignUpRequest("test@example.com", "password123!", "TestUser", 2116, "B314");
 
         assertDoesNotThrow(() -> commandAuthService.signUp(request));
     }
