@@ -22,14 +22,59 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set environment variables
+        run: echo "Setting up environment variables"
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
+          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
+          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
+          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
+
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
+          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
+          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
+          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
 
       - name: Run tests
         run: ./gradlew test
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
+          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
+          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
+          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
 
       - name: Build Docker image
         run: docker build -t bubble-server .
