@@ -12,6 +12,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgres:15
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }}"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -23,58 +38,29 @@ jobs:
           java-version: '17'
 
       - name: Set environment variables
-        run: echo "Setting up environment variables"
-        env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-          MAIL_PORT: ${{ secrets.MAIL_PORT }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
-          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
-          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
-          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
+        run: |
+          echo "POSTGRES_URL=jdbc:postgresql://db:5432/${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "POSTGRES_USERNAME=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> $GITHUB_ENV
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> $GITHUB_ENV
+          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> $GITHUB_ENV
+          echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> $GITHUB_ENV
+          echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> $GITHUB_ENV
+          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> $GITHUB_ENV
+          echo "JWT_CLIENT_SECRET=${{ secrets.JWT_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "JWT_TOKEN_EXPIRE=${{ secrets.JWT_TOKEN_EXPIRE }}" >> $GITHUB_ENV
+          echo "JWT_REFRESH_TOKEN_EXPIRE=${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}" >> $GITHUB_ENV
+          echo "JWT_ISSUER=${{ secrets.JWT_ISSUER }}" >> $GITHUB_ENV
 
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew build
-        env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-          MAIL_PORT: ${{ secrets.MAIL_PORT }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
-          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
-          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
-          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
 
       - name: Run tests
         run: ./gradlew test
-        env:
-          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-          POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          MAIL_HOST: ${{ secrets.MAIL_HOST }}
-          MAIL_PORT: ${{ secrets.MAIL_PORT }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          JWT_CLIENT_SECRET: ${{ secrets.JWT_CLIENT_SECRET }}
-          JWT_TOKEN_EXPIRE: ${{ secrets.JWT_TOKEN_EXPIRE }}
-          JWT_REFRESH_TOKEN_EXPIRE: ${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
-          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
 
       - name: Build Docker image
         run: docker build -t bubble-server .
