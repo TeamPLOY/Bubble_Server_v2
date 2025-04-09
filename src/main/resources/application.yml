@@ -7,6 +7,8 @@ spring:
       - optional:file:env/jwt.env[.properties]
       - optional:file:env/db.env[.properties]
       - optional:file:env/email.env[.properties]
+      - optional:file:env/feign.env[.properties]
+      - optional:file:env/header.env[.properties]
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${POSTGRES_URL}
@@ -65,3 +67,55 @@ jwt:
   token-expire: ${JWT_TOKEN_EXPIRE}
   refresh-token-expire: ${JWT_REFRESH_TOKEN_EXPIRE}
   issuer: ${JWT_ISSUER}
+
+
+washing:
+  machine:
+    api:
+      url: ${URL}
+
+oauth:
+  secret:
+    key: ${OAUTH_SECRET_KEY}
+  refresh:
+    token: ${REFRESH_TOKEN}
+  uri: ${OAUTHURI}
+  client:
+    id: ${CLIENT_ID}
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+  hystrix:
+    enabled: false
+
+hmac:
+  algorithm: ${HMAC_SHA1_ALGORITHM}
+
+user:
+  country:
+    code: KR
+
+header:
+  country-code: ${HEADER_COUNTRY_CODE}
+  service-phase: ${HEADER_SERVICE_PHASE}
+  user-agent: ${HEADER_USER_AGENT}
+  thinq-app-ver: ${HEADER_THINQ_APP_VER}
+  thinq-app-type: ${HEADER_THINQ_APP_TYPE}
+  language-code: ${HEADER_LANGUAGE_CODE}
+  thinq-app-logintype: ${HEADER_THINQ_APP_LOGINTYPE}
+  os-version: ${HEADER_OS_VERSION}
+  client-id: ${HEADER_CLIENT_ID}
+  thinq-app-level: ${HEADER_THINQ_APP_LEVEL}
+  app-version: ${HEADER_APP_VERSION}
+  user-no: ${HEADER_USER_NO}
+  service-code: ${HEADER_SERVICE_CODE}
+  accept-language: ${HEADER_ACCEPT_LANGUAGE}
+  origin: ${HEADER_ORIGIN}
+  model-name: ${HEADER_MODEL_NAME}
+  content-type: ${HEADER_CONTENT_TYPE}
+  api-key: ${HEADER_API_KEY}
+  thinq-app-os: ${HEADER_THINQ_APP_OS}
